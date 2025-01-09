@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expenses Tracker</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <h1>Split It Basic v1.0.0</h1>
+
+  <section>
+    <h2>Add Member</h2>
+    <input type="text" id="memberName" placeholder="Member Name">
+    <button onclick="addMember()">Add Member</button>
+  </section>
+
+  <section>
+    <h2>Members</h2>
+    <ul id="membersList"></ul>
+  </section>
+
+  <section>
+    <h2>Add Expense</h2>
+    <input type="text" id="description" placeholder="Description">
+    <input type="number" id="totalAmount" placeholder="Total Amount">
+
+    <label for="paidBy">Paid By:</label>
+    <select id="paidBy"></select>
+
+    <label for="splitType">Split Type:</label>
+    <select id="splitType" onchange="handleSplitTypeChange()">
+      <option value="equal">Equal</option>
+      <option value="unequal">Unequal</option>
+    </select>
+
+    <div id="splitDetails"></div>
+
+    <button onclick="addExpense()">Add Expense</button>
+  </section>
+
+  <section>
+    <h2>Owes List</h2>
+    <ul id="oweList"></ul>
+  </section>
+
+  <section>
+    <h2>Settle Up</h2>
+    <label for="settleFrom">From:</label>
+    <select id="settleFrom"></select>
+
+    <label for="settleTo">To:</label>
+    <select id="settleTo"></select>
+
+    <input type="number" id="settleAmount" placeholder="Amount">
+    <button onclick="settleUp()">Settle Up</button>
+  </section>
+  <section>
+    <h3>Expense Records</h3>
+    <table id="expensesTable" border="1">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Paid By</th>
+          <th>Amount</th>
+          <th>Split Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Expense rows will be inserted here dynamically -->
+      </tbody>
+    </table>
+  </section>
+  
+</body>
+</html>
