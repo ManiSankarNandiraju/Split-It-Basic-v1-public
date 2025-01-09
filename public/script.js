@@ -14,10 +14,14 @@ async function fetchExpenses() {
   updateExpensesTable(expenses);
 }
 
-
 function updateMembersUI() {
   const membersList = document.getElementById('membersList');
-  membersList.innerHTML = members.map(m => `<li>${m.name}: Balance ${m.balance.toFixed(2)}</li>`).join('');
+  membersList.innerHTML = members.map((m, index) => `
+    <li>
+      ${m.name}: Balance ${m.balance.toFixed(2)}
+      <button onclick="removeMember('${m.name}', ${index})">Remove</button>
+    </li>
+  `).join('');
 
   const paidBySelect = document.getElementById('paidBy');
   const settleFromSelect = document.getElementById('settleFrom');
@@ -32,15 +36,34 @@ function updateMembersUI() {
 }
 
 
+async function removeMember(name, index) {
+  const confirmation = confirm(`Are you sure you want to remove ${name}?`);
+  if (!confirmation) return;
+
+  const response = await fetch(`/members/${name}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (response.ok) {
+    alert(`${name} has been removed.`);
+    fetchMembers(); // Reload members after removal
+  } else {
+    alert('Error removing member.');
+  }
+}
+
+
 function updateOweList() {
   const oweList = document.getElementById('oweList');
   oweList.innerHTML = '';
-    // Calculate net balances
+  // Calculate net balances
   const balances = {};
   members.forEach(member => {
     balances[member.name] = member.balance || 0;
   });
-    // Create lists of creditors and debtors
+
+  // Create lists of creditors and debtors
   const creditors = [];
   const debtors = [];
 
@@ -51,7 +74,8 @@ function updateOweList() {
       debtors.push({ name, amount: Math.abs(balance) });
     }
   }
-    // Match debtors with creditors
+
+  // Match debtors with creditors
   while (debtors.length > 0 && creditors.length > 0) {
     const debtor = debtors[0];
     const creditor = creditors[0];
@@ -63,17 +87,16 @@ function updateOweList() {
     listItem.innerHTML = `${debtor.name} owes ${creditor.name} ${settlementAmount.toFixed(2)}`;
     listItem.className = 'negative'; // Owe statements are styled as negative
     oweList.appendChild(listItem);
-        // Adjust balances
+
+    // Adjust balances
     debtor.amount -= settlementAmount;
     creditor.amount -= settlementAmount;
-     // Remove fully settled entries
+
+    // Remove fully settled entries
     if (debtor.amount === 0) debtors.shift();
     if (creditor.amount === 0) creditors.shift();
   }
 }
-
-
-
 
 async function addMember() {
   const name = document.getElementById('memberName').value;
@@ -123,7 +146,6 @@ function handleSplitTypeChange() {
     });
   }
 }
-
 
 async function addExpense() {
   const description = document.getElementById('description').value;
