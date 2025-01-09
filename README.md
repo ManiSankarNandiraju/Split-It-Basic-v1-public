@@ -3,9 +3,12 @@ To Run in local:
 
 install MongoDB compass Tool
 
-Connect using local string:
+Connect using local string :
+
+mongodb://localhost:27017/expenses
 
 run command : node server.js
+
 
 
 
