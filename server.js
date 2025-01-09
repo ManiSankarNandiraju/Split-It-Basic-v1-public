@@ -87,6 +87,21 @@ app.post('/expenses', async (req, res) => {
   res.json(expense);
 });
 
+// Assuming you are using Express.js on the backend
+app.delete('/members/:name', async (req, res) => {
+  const memberName = req.params.name;
+
+  try {
+    const result = await db.collection('members').deleteOne({ name: memberName });
+    if (result.deletedCount > 0) {
+      res.status(200).send({ message: `${memberName} removed successfully.` });
+    } else {
+      res.status(404).send({ error: 'Member not found.' });
+    }
+  } catch (error) {
+    res.status(500).send({ error: 'Server error while deleting member.' });
+  }
+});
 
 
 app.post('/settle', async (req, res) => {
